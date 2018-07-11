@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="product_template_only_form_view_inherit_sa" model="ir.ui.view">
+        <field name="name">product.template.product.form.inherit.sa</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+			<field name="type" position="after">
+				<field name="prod_type"/>
+			</field>
+        	<xpath expr="/form/sheet/notebook/page[@name='general_information']" position="after">
+        		<page string="Combo Design">
+        			<field name="combo_details_ids">
+        				<tree string="Combo Design" editable="bottom">
+        					<field name="combo_name"/>
+							<field name="combo_size" widget="many2many_tags"/>
+							<field name="combo_colour"/>
+        					<field name="combo_placement"/>
+                            <field name="fabric_details"/>
+        					<field name="combo_check"/>
+        				</tree>
+        			</field>
+        		</page>
+        	</xpath>
+        </field>
+    </record>
+</odoo>

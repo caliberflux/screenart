@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding='UTF-8'?>
+<odoo>
+	<record model="ir.cron" id="design_exceed_24_hrs">
+        <field name="name">Design Exceed 24 Hrs</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">hours</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+        <field name="model" eval="'design'"/>
+        <field name="function" eval="'_cron_design_exceed_24_hrs'"/>
+        <field name="args" eval="'()'" />
+    </record>
+</odoo>

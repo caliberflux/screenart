@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<odoo>
+
+	<record id="design_form" model="ir.ui.view">
+        <field name="name">design.form</field>
+        <field name="model">design</field>
+        <field name="arch" type="xml">
+            <form string="Design Form">
+            	<header>
+					<field name="state" widget="statusbar"/>
+					<button name="start" type="object" string="Start" class="oe_highlight" states="draft"/>
+					<button name="done" type="object" string="Done" class="oe_highlight" states="progress"/>
+				</header>
+            	<sheet>
+	            	<group>
+	                    <group>
+	                        <field name="date"/>
+	                        <field name='merchant_name'/>
+	                        <field name='ref'/>
+	                        <field name='design_name'/>
+							<field name='design_priority'/>
+	                        <field name='quality'/>
+	                    </group>
+	                    <group>
+							<field name="started_by"/>
+	                    	<field name="start_time"/>
+	                        <field name="finished_by"/>
+	                        <field name="completion_datetime"/>
+	                    </group>
+	                </group>
+	                <group string='Merchant Comments'>
+	                	<field name="merchant_comment" nolabel="1"/>
+	                </group>
+	                <group string='Design Comments' attrs="{'invisible':[('state', '=', 'draft')]}">
+	                	<field name="design_dept_comment" nolabel="1"/>
+	                </group>
+	            </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="design_tree" model="ir.ui.view">
+        <field name="name">design.tree</field>
+        <field name="model">design</field>
+        <field name="arch" type="xml">
+            <tree string="Design Tree view"  colors="red:design_priority =='high';green:design_priority =='normal';blue:design_priority =='medium'">
+            	<field name="date"/>
+				<field name='design_name'/>
+				<field name="merchant_comment"/>
+				<field name='design_priority'/>
+	            <field name="completion_datetime"/>
+				<field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    
+	 <record id="design_search" model="ir.ui.view">
+            <field name="name">design.search</field>
+            <field name="model">design</field>
+            <field name="arch" type="xml">
+                <search string="Payments">
+                    <field name="design_name" filter_domain="[('design_name','ilike',self)]" string="Design"/>
+				</search>
+			</field>
+	 </record>
+	
+	<record id="design_form_action" model="ir.actions.act_window">
+        <field name="name">Design Form</field>
+        <field name="res_model">design</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+	<menuitem
+	    id="crm_lead_menu_design"
+	    name="Design"
+	    parent="sales_team.menu_sales"
+	    action="design_form_action"/>
+
+	</odoo>

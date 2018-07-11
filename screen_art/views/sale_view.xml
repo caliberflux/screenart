@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="wizard_quptation_approval_view" model="ir.ui.view">
+        <field name="name">quotation.approval.wizard</field>
+        <field name="model">quotation.approval.wizard</field>
+        <field name="arch" type="xml">
+                <form string="Quotation Approval" version="7.0">
+                    <group>
+                        <label string="Do You Want To Process This Quotation For Second Approval"/>
+                    </group>
+                    <footer>
+                        <button name="quotation_second_approval" string="Yes" type="object" class="oe_highlight"/>
+                        or
+                        <button string="No" special="cancel" class="oe_highlight"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        <record id="act_sale_order_2_revised" model="ir.actions.act_window">
+            <field name="name">Revised Quotation Orders</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="sale.view_quotation_tree"/>
+            <field name="domain">[('parent_so_id', '=', active_id)]</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Revised order against this Quotation Order.
+              </p>
+            </field>
+        </record>
+        
+        <record id="sale.action_orders" model="ir.actions.act_window">
+            <field name="name">Sales Orders</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,kanban,form,calendar,pivot,graph</field>
+            <field name="search_view_id" ref="sale.sale_order_view_search_inherit_sale"/>
+            <field name="context">{}</field>
+            <field name="domain">[('state', 'not in', ('draft','revised','sent', 'cancel'))]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create a Quotation, the first step of a new sale.
+                </p><p>
+                    Once the quotation is confirmed, it becomes a sales order.
+                    You'll be able to invoice it and collect payments.
+                    From the <i>Sales Orders</i> menu, you can track delivery
+                    orders or services.
+                </p>
+            </field>
+        </record>
+        
+        <record id="view_quotation_tree_sart" model="ir.ui.view">
+            <field name="name">sale.order.tree.sart</field>
+            <field name="model">sale.order</field>
+            <field name="priority">4</field>
+            <field name="arch" type="xml">
+                <tree string="Quotation" class="o_sale_order" decoration-bf="message_needaction==True" decoration-muted="state=='cancel'">
+                    <field name="message_needaction" invisible="1"/>
+                    <field name="name" string="Quotation Number"/>
+                    <field name="date_order"/>
+                    <field name="partner_id"/>
+                    <field name="user_id"/>
+                    <!--<field name="amount_total" sum="Total Tax Included" widget="monetary" attrs="{'invisible': [('state', 'not in', ('sample_order', 'sample_approval', 'production_order', 'sale', 'done'))]}"/>-->
+                    <!--<field name="quotation_amount_total" sum="Total" attrs="{'invisible': [('state', 'in', ('sample_order', 'sample_approval', 'production_order', 'sale', 'done'))]}"/> -->
+                    <field name="currency_id" invisible="1"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="sale.action_quotations" model="ir.actions.act_window">
+            <field name="name">Quotations</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="view_quotation_tree_sart"/>
+            <field name="view_mode">tree,kanban,form,calendar,pivot,graph</field>
+            <field name="search_view_id" ref="sale.sale_order_view_search_inherit_quotation"/>
+            <field name="context">{'hide_sale': True}</field>
+            <field name="domain">[('state','!=','revised')]</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Create a Quotation, the first step of a new sale.
+              </p><p>
+                Your next actions should flow efficiently: confirm the Quotation
+                to a Sale Order, then create the Invoice and collect the Payment.
+              </p><p>
+                Note that once a Quotation becomes a Sale Order, it will be moved
+                from the Quotations list to the Sales Order list.
+              </p>
+            </field>
+        </record>
+    
+        <record id="view_order_form_inherit_sart" model="ir.ui.view">
+                <field name="name">sale.order.form.sale.sart</field>
+                <field name="model">sale.order</field>
+                <field name="inherit_id" ref="sale.view_order_form"/>
+                <field name="arch" type="xml">
+                    <xpath expr="//div[@name='button_box']" position="inside">
+                        <button class="oe_inline oe_stat_button" type="action" name="%(act_sale_order_2_revised)d"
+                            icon="fa-bars" attrs="{'invisible':[('state','in',('draft','revised'))]}">
+                            <field string="Revised Quotation Orders" name="revised_order_count" widget="statinfo"/>
+                        </button>
+                    </xpath>
+                    
+                    <xpath expr="//form/header/button[5]" position="replace"/>
+                    <xpath expr="//form/header/button[5]" position="replace"/>
+                    <xpath expr="//form/header/button[5]" position="replace"/>
+    
+                    <xpath expr="//form/sheet/notebook/page[1]" position="attributes">
+                        <attribute name="attrs">{'invisible':[('state', 'not in', ('sample_order', 'sample_approval', 'production_order','job_order' ,'sale', 'done'))]}</attribute>
+                    </xpath>
+                    
+                    <xpath expr="//form/sheet/notebook/page[1]" position="after">
+                        <page string="Design Details">
+                            <field name="design_details_ids">
+                                <tree editable="bottom" string="Design Details">
+                                    <field name="sequence_name"/>
+                                    <field name="product_name"/>
+                                    <field name="size"/>
+                                    <field name="colour"/>
+                                    <field name="combo"/>
+                                    <field name="quality"/>
+                                    <field name="design_image"/>
+                                    <field name="quantity"/>
+                                    <field name="price"/>
+                                    <field name="price_subtotal"/>
+                                </tree>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="quotation_sale_total">
+                                <field name="quotation_amount_total" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            </group>
+                        </page>
+                    </xpath>
+                    
+    
+                    <field name="partner_shipping_id" position="after">
+                        <field name="job_order_type"/>
+                    </field>
+                    <field name="payment_term_id" position="after">
+                        <field name="mode_of_production" states='sent'/>
+                    </field>
+                    
+                    <xpath expr="//button[@name='action_quotation_send']" position="replace">
+                        <button name="action_quotation_send" string="Send by Email" type="object" states="quot_approval1,quot_approval2,revised_quot" class="btn-primary"/>
+                    </xpath>
+                    
+                    <xpath expr="//button[@name='action_cancel']" position="replace">
+                        <button name="action_cancel" states="draft,quot_approval1,quot_approval2,sent,sale,revised_quot,sample_order,production_order" type="object" string="Cancel"/>
+                    </xpath>
+                    
+                    <button name="print_quotation" position="replace"/>
+                    
+                    <button name="action_quotation_send" position="after">
+                        <button name="quotation_first_approval" string="Procced For Approval" type="object" states="draft" class="btn-primary"/>
+                        <button name="approve_quotation" string="Approve" type="object" states="quot_approval1" class="btn-primary"/>
+                        <button name="revised_quotation" string="Revised Quotation" type="object" states="sent" class="btn-primary"/>
+                        <button name="product_creation" string="Product Creation" type="object" states="sent" class="btn-primary"/>
+                        <button name="action_confirm" states="job_order" string="Confirm Sale" class="btn-primary o_sale_confirm" type="object" />
+                        <button name="approve_job_order" string="Approve Job Order" type="object" states="sample_order,production_order" class="btn-primary"/>
+                        <button name="js_with_client" states="job_order" string="JS with client details" class="btn-primary" type="object"/>
+                        <button name="js_without_client" states="job_order" string="JS without client details" class="btn-primary" type="object" />
+                    </button>
+                    
+                    <xpath expr="//notebook/page[1]/field[@name='order_line']/tree/field[@name='sequence']"  position="after">
+                        <field name="design_sequence"/>
+                    </xpath>
+                    
+                    <xpath expr="//notebook/page[1]/field[@name='order_line']/tree/field[@name='product_id']"  position="after">
+                        <field name="design_size"/>
+                    </xpath>
+    
+                    
+                    <xpath expr="//notebook/page[1]/field[@name='order_line']/tree/field[@name='product_id']"  position="attributes">
+                        <attribute name="string">Design</attribute>  
+                    </xpath>
+                    
+                    <xpath expr="//notebook/page[1]/field[@name='order_line']/tree/field[@name='price_subtotal']"  position="after">
+                        <button name="stock_details" type="object" icon="fa-align-justify" class="btn-primary"/>
+                    </xpath>
+                    
+                    <xpath expr="//notebook/page[1]/field[@name='order_line']"  position="attributes">
+                        <attribute name="context">{'sale_order_id': active_id}</attribute> 
+                    </xpath>
+    
+                    <xpath expr="/form/sheet/notebook/page[3]" position="after">
+                        <page string="Job Sheet Details" attrs="{'invisible': [('state', '!=', 'job_order')]}">
+                            <group>
+                                <group>
+                                    <field name="factory_id"/>
+                                    <field name="factory_member"/>
+                                    <field name="factory_distributuion_ids" widget="many2many_tags"/>
+                                </group>
+                                <group>
+                                    <field name="unit"/>
+                                    <field name="source"/>
+                                    <field name="dispatch_date"/>
+                                </group>
+                            </group>
+                            <group>
+                                <field name="note"/>
+                            </group>
+                        </page>
+                    </xpath>
+                    <xpath expr="/form/sheet/group/group[2]/field[@name='payment_term_id']" position="after">
+                        <field name="job_sheet_date" attrs="{'invisible': [('state', '!=', 'job_order')]}"/>
+                        <field name="approved_by" attrs="{'invisible': [('state', '!=', 'job_order')]}"/>
+                    </xpath>
+    
+                    
+               </field>
+            </record>
+        
+    
+        <record id="wizard_sale_order_line_sart" model="ir.ui.view">
+        <field name="name">sale.order.line.sart</field>
+        <field name="model">sale.order.line</field>
+        <field name="arch" type="xml">
+            <form string="Stock Details">  
+                <field nolabel="1" name="product_stock_details_ids">
+                    <tree editable="bottom">
+                        <field name="combo_name"/>
+                        <field name="size"/>
+                        <field name="balance_stock_qty"/>
+                        <field name="allocated_stock_qty"/>
+                        <field name="order_qty"/>
+                        <field name="print_qty"/>
+                    </tree>
+                </field>
+                <footer>
+                    <button name="save" type="object" string="Save" class="oe_highlight"/>
+                    or
+                    <button string="Cancel" special="cancel" class="oe_highlight"/>
+                </footer>
+            </form>
+        </field>
+        </record>
+        
+        <!--<record id="wizard_sale_order_line_sart_search" model="ir.ui.view">
+        <field name="name">sale.order.line.sart.search</field>
+        <field name="model">sale.order.line</field>
+        <field name="arch" type="xml">
+            <form string="Stock Details">  
+                <field nolabel="1" name="product_stock_details_ids">
+                    <tree editable="bottom">
+                        <field name="combo_name"/>
+                        <field name="size"/>
+                        <field name="balance_stock_qty"/>
+                        <field name="allocated_stock_qty"/>
+                        <field name="order_qty"/>
+                        <field name="print_qty"/>
+                    </tree>
+                </field>
+                <footer>
+                    <button name="save" type="object" string="Save" class="oe_highlight"/>
+                    or
+                    <button string="Cancel" special="cancel" class="oe_highlight"/>
+                </footer>
+            </form>
+        </field>
+        </record>-->
+            
+    
+    </data>
+    
+    <data noupdate="1">
+        <record id="sequence_prod_design" model="ir.sequence">
+            <field name="name">Design Details</field>
+            <field name="code">design.details</field>
+            <field name="prefix">DS</field>
+            <field name="padding">5</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+    </data>
+</odoo>

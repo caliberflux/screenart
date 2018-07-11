@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_employee_form_inherit_sart" model="ir.ui.view">
+            <field name="name">hr.employee.sart</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <field name="parent_id" position="after">
+                    <field name="factory_id"/>
+                </field>
+            </field>
+    </record>
+    
+    <record id="form_factory" model="ir.ui.view">
+        <field name="name">factory.form</field>
+        <field name="model">factory</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="name"/>
+                </group>
+                <group string="Employees">
+                    <field nolabel="1" name="emoloyee_ids"/>
+                </group>
+            </form>
+        </field>
+    </record>
+    
+    <record id="tree_factory" model="ir.ui.view">
+        <field name="name">factory.tree</field>
+        <field name="model">factory</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    
+    <record id="action_factory" model="ir.actions.act_window">
+        <field name="name">Factory</field>
+        <field name="res_model">factory</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Click to create a factory.
+          </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_factory"
+              name="Factories"
+              action="action_factory"
+              parent="hr.menu_hr_root"
+              sequence="95"/>
+    
+</odoo>

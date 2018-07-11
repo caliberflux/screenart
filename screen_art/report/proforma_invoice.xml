@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="proforma_invoice_template_main1">
+            <t t-set="doc" t-value="doc.with_context({'lang':doc.partner_id.lang})" />
+                <div class="header text-uppercase" style="font-family: aerial;">
+                    <div class="row">
+                        <div class="col-xs-8" align="right" style="font-size:20px"><strong>PROFORMA INVOICE</strong><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]]><![CDATA[&nbsp;&nbsp;&nbsp;]]></div>
+                        <div class="col-xs-4" align="right">Page<![CDATA[&nbsp;]]>(<span class="page"/>)</div>
+                    </div>
+                    <div class="row" align="center" style="border: 1px solid black;">
+                        <p><strong><h4><span t-field="doc.company_id.name"/></h4></strong></p>
+                        <t t-if="doc.cmp_street or doc.cmp_city or doc.cmp_state_id or doc.cmp_country_id">
+                            <p>
+                                <strong><span t-field="doc.cmp_street"/>,
+                                <span t-field="doc.cmp_street2"/>,
+                                <span t-field="doc.cmp_city"/>-
+                                <span t-field="doc.cmp_zip"/>,
+                                <span t-field="doc.cmp_state_id.name"/></strong>
+                            </p>
+                        </t>
+                        <t t-if="not doc.cmp_street and not doc.cmp_city and not doc.cmp_state_id">
+                            <p>
+                                <strong><span t-field="doc.company_id.street"/>,
+                                <span t-field="doc.company_id.street2"/>,
+                                <span t-field="doc.company_id.city"/>-
+                                <span t-field="doc.company_id.zip"/>,
+                                <span t-field="doc.company_id.state_id.name"/></strong>
+                            </p>
+                        </t>
+                        <p>
+                            Phone: <span t-field="doc.company_id.phone"/>/E-mail: <span t-field="doc.company_id.email"/>
+                        </p>
+                        <p>
+                            <span style="float:left;padding-left:15%;">GSTIN/UIN :<![CDATA[&nbsp;]]><strong><t t-esc="doc.company_id.partner_id.gstin"/></strong></span>
+                            <span style="float:right;padding-right:15%;">PAN/Income Tax No. :<![CDATA[&nbsp;]]><strong><t t-esc="doc.company_id.partner_id.pan_no"/></strong></span>
+                        </p>
+                    </div>
+                    
+                </div>
+                
+                <div class="footer">
+                    <div class="row"><hr style="border-top:1px solid black;width=100%"></hr></div>
+                </div>
+                <div class="page text-uppercase" style="font-size: 15px !important;font-family: aerial;">
+                            <div class="row" style="border: 1px solid black;padding-right:30%;padding-left:35px;">
+                                <br/>
+                                <div class="row">
+                                    Company’s Bank Details
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-8">
+                                        <span>Bank Name :<![CDATA[&nbsp;]]><strong><t t-esc="doc.company_id.partner_id.bank_ids[0].bank_id.name"/></strong></span><br/>
+                                        <span>A/c No. :<![CDATA[&nbsp;]]><strong><t t-esc="doc.company_id.partner_id.bank_ids[0].acc_number"/></strong></span>
+                                    </div>
+                                    <div class="col-xs-4" >
+                                        <span style="padding-right:15%;">Branch :<![CDATA[&nbsp;]]><strong><t t-esc="doc.company_id.partner_id.bank_ids[0].branch"/></strong></span><br/>
+                                        <span style="padding-right:15%;">IFS Code :<![CDATA[&nbsp;]]><strong><t t-esc="doc.company_id.partner_id.bank_ids[0].ifs_code"/></strong></span>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        
+                            <div class="row" style="border-bottom: 1px solid black;border-right: 1px solid black;border-left: 1px solid black;">
+                                <div class="row" style="width:50%;float:left;padding-right:10px;">
+                                    <div class="row" style="border-right: 1px solid black;border-bottom: 1px solid black;padding-left:10%;">
+                                        <p>Dispatch To</p>
+                                        <strong><p><span t-field="doc.partner_id.parent_id.name"/></p>
+                                        <p><span t-field="doc.partner_shipping_id.street"/>
+                                        <span t-field="doc.partner_shipping_id.street2"/>
+                                        <span t-field="doc.partner_shipping_id.city"/>
+                                        <span t-field="doc.partner_shipping_id.state_id.name"/>
+                                        <span t-field="doc.partner_shipping_id.zip"/></p></strong>
+                                        <br/>
+                                        <p>KIND ATTN: <strong><span t-field="doc.partner_shipping_id.name"/></strong></p>
+                                        <p>Tel No. : <strong><span t-field="doc.partner_shipping_id.mobile"/></strong></p>
+                                        <p>GST: <strong><span t-field="doc.partner_shipping_id.gstin"/></strong></p>
+                                    </div>
+                                    <div class="row" style="border-right: 1px solid black;padding-left:10%;">
+                                        <p>Invoice To</p>
+                                        <strong><p><span t-field="doc.partner_id.parent_id.name"/></p>
+                                        <p><span t-field="doc.partner_id.street"/>
+                                        <span t-field="doc.partner_id.street2"/>
+                                        <span t-field="doc.partner_id.city"/>
+                                        <span t-field="doc.partner_id.state_id.name"/>
+                                        <span t-field="doc.partner_id.zip"/></p></strong>
+                                        <br/>
+                                        <p>KIND ATTN: <strong><span t-field="doc.partner_id.name"/></strong></p>
+                                        <p>Tel No. : <strong><span t-field="doc.partner_id.mobile"/></strong></p>
+                                        <p>GST: <strong><span t-field="doc.partner_id.gstin"/></strong></p>
+                                    </div>
+                                </div>
+                                <div class="row" style="width:51%;float:right;height:100%;">
+                                    <div class="row" style="border-bottom:1px solid black;" width="100%">
+                                        <div style="float:left;border-right:1px solid black;width:50%;">
+                                            <p><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]>Voucher No.</p>
+                                            <p><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]><strong><t t-esc="doc.origin"></t></strong></p>
+                                        </div>                              
+                                        <div style="float:right;width:50%;">
+                                            <p><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]>Dated</p>
+                                            <strong><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]><span t-field="doc.sale_order_id.confirmation_date"/></strong>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="border-bottom:1px solid black;" width="100%">
+                                        <p><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]>Buyer’s Ref. /Order No.</p>
+                                        <p><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]><strong><span t-field="doc.sale_order_id.client_order_ref"/></strong></p>
+                                    </div>
+                                    <div class="row" style="border-bottom:1px solid black;" width="100%">
+                                        <div style="float:left;width:50%;border-right:1px solid black;">
+                                            <p><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]>Mode/Terms of Payment</p>
+                                            <strong><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]><span t-field="doc.payment_term_id.name"/></strong>
+                                            <br/>
+                                        </div>
+                                        <!--<div style="float:right;width:50%;">
+                                            <p></p>
+                                            <p></p>
+                                            <br/>
+                                        </div>-->
+                                    </div>
+                                    <div class="row" style="border-bottom:1px solid black;" width="100%">
+                                        <div style="float:left;width:50%;border-right:1px solid black;">
+                                           <p><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]>Supplier’s Ref./OrderNo.</p>
+                                           <strong><p><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]><span t-field="doc.number"/></p></strong>
+                                        </div>
+                                        <div style="float:right;width:50%;">
+                                           <p><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]>PROFORMA INVOICE DATE</p>
+                                           <strong><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]><span t-field="doc.date_invoice"/></strong> 
+                                        </div>
+                                    </div>
+                                    <div class="row" style="border-bottom:1px solid black;" width="100%">
+                                        <div style="float:left;width:50%;border-right:1px solid black;">
+                                           <p><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]>Dispatch through</p>
+                                            <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]><span  t-esc="doc.dispatch_medium_id.name"/>
+                                            <br/>
+                                        </div>
+                                        <div style="float:right;width:50%;">
+                                           <p><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]>Destination</p>
+                                            <p></p>
+                                            <br/>
+                                        </div>
+                                    </div>
+                                    <div class="row" width="100%">
+                                        <p><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]>Terms of Delivery</p>
+                                        <t t-as="cond" t-foreach="doc.delivery_term_ids">
+                                            <b><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]><t t-esc="cond.name"/></b><br/>
+                                        </t>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                        <div class="row" style="border:1px solid black;" width="100%">
+                            <table cellpadding="0" cellspacing="0" class="table-condensed" style="border:0.5px solid #ccc;border-collapse: collapse; padding:15px; border:1px solid #ccc;" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th style="border-right:1px solid black;border-bottom:1px solid black;">Sr No.</th>
+                                        <th style="border-right:1px solid black;border-bottom:1px solid black;">Description of goods</th>
+                                        <th style="border-right:1px solid black;border-bottom:1px solid black;width:15%">Tariff/HSN Classification</th>
+                                        <th style="border-right:1px solid black;border-bottom:1px solid black;">Quantity</th>
+                                        <th style="border-right:1px solid black;border-bottom:1px solid black;">Rate</th>
+                                        <th style="border-right:1px solid black;border-bottom:1px solid black;">Per</th>
+                                        <th style="border-bottom:1px solid black;">Amount</th>
+                                    </tr>    
+                                </thead>
+                                <tbody>
+                                    <t t-set="sr_inc" t-value="0"/>
+                                    <t t-set="qty_tot" t-value="0"/>
+                                    <t t-as="so" t-foreach="doc.sale_order_id.order_line">
+                                            <t t-set="sr_inc" t-value="sr_inc+1"/>
+                                            <tr>
+                                                <td style="border-right:1px solid black;text-align:right"><span t-esc="sr_inc"/>.</td>
+                                                <td style="border-right:1px solid black;">
+                                                    <div>
+                                                        <p><span t-field="so.product_id.prod_type"/></p>
+                                                        Design name:<br/>
+                                                        <span t-field="so.product_id.name"/><br/>
+                                                        Design size:<br/>
+                                                        <span/><br/>
+                                                    </div>
+                                                    <t t-set="qty_add" t-value="so.product_uom_qty"/>
+                                                    <t t-set="qty_tot" t-value="qty_tot+qty_add"/>
+                                                </td>
+                                                <td style="border-right:1px solid black;"><span t-field="so.product_id.hsn_code"/></td>
+                                                <td style="border-right:1px solid black;"></td>
+                                                <td style="border-right:1px solid black;"></td>
+                                                <td style="border-right:1px solid black;"></td>
+                                                <td style=""></td>
+                                            </tr>
+                                            <t t-set="p" t-value="so.get_combo_name()"/>
+                                            <t t-set="inc" t-value="0"/>
+                                            <t t-foreach="p" t-as="k">
+                                            <tr>
+                                                <td style="border-right:1px solid black;"></td>
+                                                <td style="border-right:1px solid black;">
+                                                    Combo name:<br/>
+                                                    <span t-esc="k"/><br/>
+                                                </td>
+                                                <td style="border-right:1px solid black;"></td>
+                                                <td style="border-right:1px solid black;"></td>
+                                                <td style="border-right:1px solid black;"></td>
+                                                <td style="border-right:1px solid black;"></td>
+                                                <td style=""></td>
+                                                
+                                            </tr>
+                                            <t t-as="cn" t-foreach="so.product_stock_details_ids">
+                                                <t t-if="cn.combo_name == k">
+                                                    <tr>
+                                                        <td style="border-right:1px solid black;"></td>
+                                                        <td style="border-right:1px solid black;"><span t-field="cn.size"/></td>
+                                                        <td style="border-right:1px solid black;"></td>
+                                                        <td style="border-right:1px solid black;"><span t-field="cn.order_qty"/></td>
+                                                        <td style="border-right:1px solid black;"><span t-field="so.price_unit"/></td>
+                                                        <td style="border-right:1px solid black;"><span t-field="so.product_id.uom_id.name"/></td>
+                                                        <td style=""><span t-esc="so.price_unit * cn.order_qty"/></td>
+                                                    </tr>
+                                                </t>
+                                            </t>
+                        
+                                        </t> 
+                                    </t>
+                                    <tr>
+                                        <td style="border-right:1px solid black;"></td>
+                                        <td style="border-right:1px solid black;"></td>
+                                        <td style="border-right:1px solid black;"></td>
+                                        <td style="border-right:1px solid black;"></td>
+                                        <td style="border-right:1px solid black;"></td>
+                                        <td style="border-right:1px solid black;"></td>
+                                        <td style="border-top:1px solid black;"><span t-field="doc.amount_untaxed"/></td>
+                                    </tr>
+                                    <t t-as="line" t-foreach="doc.charges_ids">
+                                        <tr>
+                                            <td style="border-right:1px solid black;"></td>
+                                            <td style="border-right:1px solid black;"><t t-esc="line.charge.name"></t></td>
+                                            <td style="border-right:1px solid black;"></td>
+                                            <td style="border-right:1px solid black;"></td>
+                                            <td style="border-right:1px solid black;"></td>
+                                            <td style="border-right:1px solid black;"></td>
+                                            <td style=""><t t-esc="line.amount"></t></td>
+                                        </tr>
+                                    </t>
+                                    
+                                    <t t-if="doc.invoice_line_ids[0].tax_desc=='igst'">
+                                        <tr>
+                                            <td style="border-right:1px solid black;"></td>
+                                            <td style="border-right:1px solid black;">IGST<![CDATA[&nbsp;]]>(<span t-esc="doc.amount_untaxed"/>)<![CDATA[&nbsp;]]><![CDATA[&nbsp;]]><span t-esc="doc.invoice_line_ids[0].gst_amount"/>%<![CDATA[&nbsp;]]>On Products</td>
+                                            <td style="border-right:1px solid black;"></td>
+                                            <td style="border-right:1px solid black;"></td>
+                                            <td style="border-right:1px solid black;"></td>
+                                            <td style="border-right:1px solid black;"></td>
+                                            <td style=""><span t-esc="sum(line.igst for line in doc.invoice_line_ids)"/></td>
+                                        </tr>
+                                    </t>
+                                    
+                                    <t t-if="doc.invoice_line_ids[0].tax_desc != 'igst'">
+                                        <tr>
+                                            <td style="border-right:1px solid black;"></td>
+                                            <td style="border-right:1px solid black;">CGST<![CDATA[&nbsp;]]>(<span t-esc="doc.amount_untaxed"/>)<![CDATA[&nbsp;]]><![CDATA[&nbsp;]]><span t-esc="doc.invoice_line_ids[0].gst_amount/2"/>%<![CDATA[&nbsp;]]>On Products</td>
+                                            <td style="border-right:1px solid black;"></td>
+                                            <td style="border-right:1px solid black;"></td>
+                                            <td style="border-right:1px solid black;"></td>
+                                            <td style="border-right:1px solid black;"></td>
+                                            <td style=""><span t-esc="sum(line.cgst for line in doc.invoice_line_ids)"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="border-right:1px solid black;"></td>
+                                            <td style="border-right:1px solid black;">sGST<![CDATA[&nbsp;]]>(<span t-esc="doc.amount_untaxed"/>)<![CDATA[&nbsp;]]><![CDATA[&nbsp;]]><span t-esc="doc.invoice_line_ids[0].gst_amount/2"/>%<![CDATA[&nbsp;]]>On Products</td>
+                                            <td style="border-right:1px solid black;"></td>
+                                            <td style="border-right:1px solid black;"></td>
+                                            <td style="border-right:1px solid black;"></td>
+                                            <td style="border-right:1px solid black;"></td>
+                                            <td style=""><span t-esc="sum(line.sgst for line in doc.invoice_line_ids)"/></td>
+                                        </tr>
+                                    </t>
+                                    
+                                    <t t-if='doc.charges_ids'>
+                                        <tr>
+                                            <td style="border-right:1px solid black;"></td>
+                                            <td style="border-right:1px solid black;">Tax<![CDATA[&nbsp;]]>(<span t-esc="sum(line.amount for line in doc.charges_ids if line.charge.charge_type == 'add')"/>)<![CDATA[&nbsp;]]><![CDATA[&nbsp;]]><span t-esc="doc.charges_ids[0].tax_ids[0].amount"/>%<![CDATA[&nbsp;]]>On Service</td>
+                                            <td style="border-right:1px solid black;"></td>
+                                            <td style="border-right:1px solid black;"></td>
+                                            <td style="border-right:1px solid black;"></td>
+                                            <td style="border-right:1px solid black;"></td>
+                                            <td style=""><span t-esc="sum(line.tax_amount for line in doc.charges_ids)"/></td>
+                                        </tr>
+                                    </t>
+                                    
+                                    <tr style="border-top:1px solid black;">
+                                        <td style="border-right:1px solid black;"></td>
+                                        <td style="border-right:1px solid black;text-align:right">Total</td>
+                                        <td style="border-right:1px solid black;"></td>
+                                        <td style="border-right:1px solid black;"></td>
+                                        <td style="border-right:1px solid black;"></td>
+                                        <td style="border-right:1px solid black;"></td>
+                                        <td style=""><span t-field="doc.amount_total"/></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="row" style="border-bottom:1px solid black;border-right:1px solid black;border-left:1px solid black;">
+                            <div>
+                                <p style="padding:10px;">Amount Chargable in words:  <b><span t-esc="doc.amount_to_text(doc.amount_total,doc.currency_id)"/></b></p>
+                            </div>
+                        </div>
+                        <div class="row" style="border-bottom:1px solid black;border-right:1px solid black;border-left:1px solid black;">
+                            <br/>
+                            <br/>
+                            <div>
+                                <p style="padding:10px;">Terms &amp; condition</p>
+                                <p><![CDATA[&nbsp;]]>* Payment within Due Date otherwise 21% p.a interest will be charged</p>
+                                <p><![CDATA[&nbsp;]]>* Subject to Mumbai Jurisdiction</p>
+                                <t t-foreach="doc.invoice_terms_conditions" t-as="con">
+                                    <p><![CDATA[&nbsp;]]>* <t t-esc="con.condition"/></p>
+                                </t>
+                            </div>
+                        </div>
+                        <div class="row" style="border-bottom:1px solid black;border-right:1px solid black;border-left:1px solid black;" width="100%">
+                            <table style="width:100%; float:left;">
+                                <tr>
+                                    <td style="width:70%;border-right:1px solid black;"></td>
+                                    
+                                    <td style="widht:30%;padding:10px;">
+                                        <p style="text-align:right"><b>for SCREEEN ART &amp; GRAPHICS</b></p>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <p style="text-align:right"><b>Authorised Signatory</b></p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                       
+                </div>
+        </template>
+        <template id="report_proforma_invoice_1">
+            <t t-call="report.html_container">
+                <t t-as="doc" t-foreach="docs">
+                    <t t-call="screen_art.proforma_invoice_template_main1" t-lang="doc.partner_id.lang"/>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

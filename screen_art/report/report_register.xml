@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <report 
+        id="report_original_job_order_sheet"
+        string="Original Job Order"
+        model="sale.order" 
+        report_type="qweb-pdf"
+        file="screen_art.report_original_job_order_sheet_template" 
+        name="screen_art.report_original_job_order_sheet_template" 
+    />
+    
+    <report 
+        id="report_original_job_order_sheet_wo_client_details"
+        string="Original Job Order wo client details"
+        model="sale.order" 
+        report_type="qweb-pdf"
+        file="screen_art.report_original_job_order_sheet_template_without_client_details" 
+        name="screen_art.report_original_job_order_sheet_template_without_client_details" 
+    />
+    
+    <report 
+        id="report_proforma_invoice_original"
+        string="Proforma Invoice"
+        model="account.invoice" 
+        report_type="qweb-pdf"
+        file="screen_art.report_proforma_invoice_1" 
+        name="screen_art.report_proforma_invoice_1" 
+    />
+    
+    <report 
+        id="report_tax_invoice_original"
+        string="Tax Invoice"
+        model="account.invoice" 
+        report_type="qweb-pdf"
+        file="screen_art.report_tax_invoice_1" 
+        name="screen_art.report_tax_invoice_1" 
+    />
+    
+    <record id="paperformat_proforma_invoice" model="report.paperformat">
+		<field name="name">Proforma Invoice</field>
+		<field name="default" eval="True"/>
+		<field name="format">A4</field>
+		<field name="orientation">Portrait</field>
+		<field name="margin_top">35</field>
+		<field name="margin_bottom">10</field>
+		<field name="margin_left">5</field>
+		<field name="margin_right">5</field>
+		<field name="header_line" eval="False" />
+		<field name="header_spacing">31</field>
+		<field name="dpi">90</field>
+	</record>
+	
+	<record id="paperformat_tax_invoice" model="report.paperformat">
+		<field name="name">tax Invoice</field>
+		<field name="default" eval="True"/>
+		<field name="format">A4</field>
+		<field name="orientation">Portrait</field>
+		<field name="margin_top">10</field>
+		<field name="margin_bottom">14</field>
+		<field name="margin_left">5</field>
+		<field name="margin_right">5</field>
+		<field name="header_line" eval="False" />
+		<field name="header_spacing">10</field>
+		<field name="dpi">90</field>
+	</record>
+    
+    <record id="screen_art.report_proforma_invoice_original" model="ir.actions.report.xml">
+		<field name="paperformat_id" ref="screen_art.paperformat_proforma_invoice" />
+	</record> 
+	<record id="screen_art.report_tax_invoice_original" model="ir.actions.report.xml">
+		<field name="paperformat_id" ref="screen_art.paperformat_tax_invoice" />
+	</record> 
+
+</odoo>

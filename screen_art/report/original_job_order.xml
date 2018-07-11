@@ -1,0 +1,759 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<!--js with client details-->
+	<template id="report_original_job_order_sheet_template_document">
+	        <t t-set="doc" t-value="doc.with_context({'lang':doc.partner_id.lang})" />
+			<div class="footer">
+				<div><hr style="border-top:1px solid black;width=100%;"></hr></div>
+				<div style="text-align:right">
+					<ul class="list-inline">
+					<li>Page: (<span class="page"/>)</li>
+					</ul>
+				</div>
+			</div>
+
+	        <div class="page" style="font-size: 17px !important;font-family: aerial;">
+
+				<t t-foreach="doc.factory_distributuion_ids" t-as="line">
+					<p style="float:right"><strong><![CDATA[&nbsp;]]><t t-esc="line.name"/><![CDATA[&nbsp;]]>|</strong></p>
+				</t>
+				<br/>
+				<div class="row">
+	            	<div class="col-xs-4">
+            			<strong>ORIGINAL JOB-SHEET DATED:</strong>
+            		</div>
+            		<div class="col-xs-2">
+            			<strong><span t-field='doc.job_sheet_date' t-options="{&quot;format&quot;: &quot;dd/MM/yyyy&quot;}"></span></strong>
+            		</div>
+            		<div class="col-xs-6"></div>
+	            </div>
+	            <div class="row">
+		            <div class="col-xs-4">
+		            	NOTE
+		            </div>
+		            <div class="col-xs-8 text-uppercase">
+		            	<span t-field='doc.opportunity_id.description'></span>
+		            </div>
+		        </div>
+		        <div class="row">
+		            <div class="col-xs-4">
+		            	JOB NO
+		            </div>
+		            <div class="col-xs-8 text-uppercase">
+		            	<span t-field='doc.name'></span>
+		            </div>
+		        </div>
+		        <div class="row">
+		            <div class="col-xs-4">
+		            	MERCHANT NAME
+		            </div>
+		            <div class="col-xs-8 text-uppercase">
+		            	<span t-field='doc.user_id.name'></span>
+		            </div>
+		        </div>
+		        <div class="row">
+		            <div class="col-xs-4">
+		            	ORDER CONFIRMATION DATE
+		            </div>
+		            <div class="col-xs-8">
+		            	<span t-field='doc.opportunity_id.date_open'></span>
+		            </div>
+		        </div>
+		        <div class="row">
+		            <div class="col-xs-4">
+		            	INQUIRY NOTE
+		            </div>
+		            <div class="col-xs-8 text-uppercase">
+		            	<span t-field='doc.opportunity_id.description'></span>
+		            </div>
+		        </div>
+		        <div class="row">
+		            <div class="col-xs-4">
+		            	REFERENCE
+		            </div>
+		            <div class="col-xs-8 text-uppercase">
+		            	<span t-field='doc.opportunity_id.reference'></span>
+		            </div>
+		        </div>
+		        <div class="row">
+		            <div class="col-xs-4">
+		            	PARTY NAME
+		            </div>
+		            <div class="col-xs-8 text-uppercase">
+		            	<span t-field='doc.partner_id.parent_id'></span>
+		            </div>
+		        </div>
+				<div class="row">
+		            <div class="col-xs-4">
+		            	PARTY CODE
+		            </div>
+		            <div class="col-xs-8 text-uppercase">
+		            	<span t-field='doc.partner_id.customer_code'></span>
+		            </div>
+		        </div>
+		        <div class="row">
+		            <div class="col-xs-4">
+		            	KIND ATTN
+		            </div>
+		            <div class="col-xs-8 text-uppercase">
+		            	<span t-field='doc.partner_id.name'></span>
+		            </div>
+		        </div>
+		        <div class="row">
+		            <div class="col-xs-4">
+		            	BILLING ADDRESS
+		            </div>
+		            <div class="col-xs-8 text-uppercase">
+		            	<span t-field='doc.partner_invoice_id.street'></span>,<span t-field='doc.partner_invoice_id.street2'></span>,<span t-field='doc.partner_invoice_id.city'></span>,<span t-field='doc.partner_invoice_id.state_id.name'></span>-<span t-field='doc.partner_invoice_id.zip'></span>
+		            </div>
+		        </div>
+		        <div class="row">
+		            <div class="col-xs-4">
+		            	DISPATCH ADDRESS
+		            </div>
+		            <div class="col-xs-8 text-uppercase">
+		            	<span t-field='doc.partner_shipping_id.street'></span>,<span t-field='doc.partner_shipping_id.street2'></span>,<span t-field='doc.partner_shipping_id.city'></span>,<span t-field='doc.partner_shipping_id.state_id.name'></span>-<span t-field='doc.partner_shipping_id.zip'></span>
+		            </div>
+		        </div>
+		        <div class="row">
+		            <div class="col-xs-4">
+		            	DISPACTH PINCODE
+		            </div>
+		            <div class="col-xs-8 text-uppercase">
+		            	<span t-field='doc.partner_shipping_id.zip'></span>
+		            </div>
+		        </div>
+				<div class="row">
+		            <div class="col-xs-4">
+		            	PRINTING FACTORY
+		            </div>
+		            <div class="col-xs-8 text-uppercase">
+		            	<span t-field='doc.factory_id'></span>
+		            </div>
+		        </div>
+				<div class="row">
+		            <div class="col-xs-4">
+		            	FACTORY MEMBER
+		            </div>
+		            <div class="col-xs-8 text-uppercase">
+		            	<span t-field='doc.factory_member'></span>
+		            </div>
+		        </div>
+		        <div class="row">
+		            <div class="col-xs-4">
+		            	PRINT QUANTITY
+		            </div>
+		            <div class="col-xs-8 text-uppercase">
+		            	<span t-field='doc.opportunity_id.print_quality'></span>
+		            </div>
+		        </div>
+		        <div class="row">
+		            <div class="col-xs-4">
+		            	PRODUCT QUALITY
+		            </div>
+		            <div class="col-xs-8 text-uppercase">
+		            	<span t-field='doc.confirmation_date'></span>
+		            </div>
+		        </div>
+		        <div class="row">
+		            <div class="col-xs-4">
+		            	FABRIC QUALITY
+		            </div>
+		            <div class="col-xs-8 text-uppercase">
+		            	<span t-field='doc.opportunity_id.fabric_quality'></span>
+		            </div>
+		        </div>
+		        <div class="row">
+		            <div class="col-xs-4">
+		            	FABRIC COLOR
+		            </div>
+		            <div class="col-xs-8 text-uppercase">
+		            	<span t-field='doc.opportunity_id.fabric_gr_colour'></span>
+		            </div>
+		        </div>
+		        <div class="row">
+		            <div class="col-xs-4">
+		            	SOURCE
+		            </div>
+		            <div class="col-xs-8 text-uppercase">
+		            	<span t-field='doc.source'></span>
+		            </div>
+		        </div>
+		        <!--<div class="row">
+		            <div class="col-xs-6">
+		            	<strong>INSTRUCTION FOR ART/FACTORY DEPT</strong>
+		            </div>
+		            <div class="col-xs-6"></div>
+		        </div>
+		        <div class="row">
+		            <div class="col-xs-6">
+		            	<strong>REQ.CODE</strong>
+		            </div>
+		            <div class="col-xs-6"></div>
+		        </div>
+		        <div class="row">
+		            <div class="col-xs-3">
+		            	NO OF COLORS
+		            </div>
+		            <div class="col-xs-9">
+		            	1
+		            </div>
+		        </div>
+		        <div class="row">
+		            <div class="col-xs-3">
+		            	NO OF COMBOS
+		            </div>
+		            <div class="col-xs-9">
+		            	1
+		            </div>
+		        </div>
+		        <div class="row">
+		            <div class="col-xs-3">
+		            	NO OF DESIGNS
+		            </div>
+		            <div class="col-xs-9">
+		            	<t t-esc="len(doc.order_line)"></t>
+		            </div>
+		        </div>
+		        <div class="row">
+		            <div class="col-xs-3">
+		            	NO OF STYLES
+		            </div>
+		            <div class="col-xs-9">
+		            	1
+		            </div>
+		        </div>
+		        <div class="row">
+		            <div class="col-xs-3">
+		            	NO OF SIZE
+		            </div>
+		            <div class="col-xs-9">
+		            	1
+		            </div>
+		        </div>-->
+		        <div class="row">
+					 <t t-set="sr_inc" t-value="0"/>
+		            <div class="col-xs-4">
+		            	<strong>DESIGNS</strong>
+		            </div>
+		            <div class="col-xs-8 text-uppercase">
+		            	<t t-foreach="doc.order_line" t-as="line">
+							<t t-set="sr_inc" t-value="sr_inc+1"/>
+		            		<p><span t-esc="sr_inc"/>.<![CDATA[&nbsp;]]><span t-field="line.product_id.name"/></p>
+		            	</t>
+		            </div>
+		        </div><br/><br/>
+		        <div style="text-align:center">
+		        	<strong><u>DESIGN DETAILS</u></strong>
+		        </div>
+				<br/>
+		        <div style="border:1px solid black;border-bottom:1px solid black;border-left:1px solid black;border-right:1px solid black">
+					<t t-set="sr_inc1" t-value="0"/>
+		        	<t t-foreach="doc.order_line" t-as="line">
+					<t t-set="sr_inc1" t-value="sr_inc1+1"/>
+		        	<div>
+			        	<div class='col-xs-3'>
+							<b>Design Name:</b> 
+		        	    </div>
+			        	<div class="col-xs-9">
+			            	<b><span t-esc="sr_inc1"/>.<![CDATA[&nbsp;]]><span t-field="line.product_id.name"/></b>
+			            </div>
+			        </div><br/><br/>
+			        <div>
+			            <div class='col-xs-3'>
+			        		No of color:
+			        	</div>
+			        	<div class="col-xs-9">
+			            	1
+			            </div>
+			        </div><br/><br/>
+			        <div>
+			            <div class='col-xs-3'>
+			        		No of Combo:
+			        	</div>
+			        	<div class="col-xs-9">
+			            	1
+			            </div>
+			        </div><br/><br/>
+			        <div>
+			            <div class='col-xs-3'>
+			        		Design Size:
+			        	</div>
+			        	<div class="col-xs-9">
+			            	<span t-field="line.design_size"/>
+			            </div>
+			        </div><br/><br/>
+		            <!-- <t t-foreach="doc.order_line" t-as="line"> -->
+		            	<t t-foreach="line.product_id.combo_details_ids" t-as="combo">
+		            	<div>
+				            <div class='col-xs-3'>
+				        		Combo Name:
+				        	</div>
+				        	<div class="col-xs-9">
+				            	<span t-field="combo.combo_name"/>
+				            </div>
+			        	</div><br/><br/>
+			        	<div>
+				            <div class='col-xs-3'>
+				        		Color Placement:
+				        	</div>
+				        	<div class="col-xs-9">
+				            	<span t-field="combo.combo_placement"/>
+				            </div>
+				        </div><br/><br/>
+				        <div>
+				            <div class='col-xs-3'>
+				        		Fabric Details:
+				        	</div>
+				        	<div class="col-xs-9">
+				            	<!-- <span t-field="combo.combo_size"/> -->
+				            </div>
+				        </div><br/><br/>
+				        <!-- <t t-foreach="line.product_id.combo_details_ids" t-as="combo_details"> -->
+				        	
+		            	<div style='padding-left: 20px;padding-right:20px'>
+				            <table class="table table-condensed" style="border:1px solid black;">
+				            	<thead>
+			                        <tr>
+			                        	<th style="border-right:1px solid black;text-align:center;">SIZE</th>
+			                        	<th style="border-right:1px solid black;text-align:center;">BALANCE STOCK QTY</th>
+			                        	<th style="border-right:1px solid black;text-align:center;">ALLOCATED STOCK QTY</th>
+			                        	<th style="border-right:1px solid black;text-align:center;">ORDER QTY</th>
+			                        	<th style="border-right:1px solid black;text-align:center;">PRINT QTY</th>
+			                        </tr>
+		                    	</thead>
+		                    	<tbody>
+									<t t-set="order_qty" t-value="0" />
+									<t t-set="print_qty" t-value="0" />
+		                    		<t t-foreach="line.product_stock_details_ids" t-as="com">
+										<t t-if="combo.combo_name == com.combo_name">
+											<tr>
+												<td style="border-right:1px solid black;border-bottom:1px solid black;border-top:1px solid black;text-align:center"><strong><span t-field="com.size"/></strong></td>
+												<td style="border-right:1px solid black;border-bottom:1px solid black;border-top:1px solid black;text-align:center"><strong><span t-field="com.balance_stock_qty"/></strong></td>
+												<td style="border-right:1px solid black;border-bottom:1px solid black;border-top:1px solid black;text-align:center"><strong><span t-field="com.allocated_stock_qty"/></strong></td>
+												<td style="border-right:1px solid black;border-bottom:1px solid black;border-top:1px solid black;text-align:center"><strong><span t-field="com.order_qty"/></strong></td>
+												<td style="border-right:1px solid black;border-bottom:1px solid black;border-top:1px solid black;text-align:center"><strong><span t-field="com.print_qty"/></strong></td>
+											</tr>
+											<tr>
+												<td></td>
+											</tr>
+                                            <t t-set="order_qty" t-value="order_qty+com.order_qty" />
+											<t t-set="print_qty" t-value="print_qty+com.print_qty" />
+
+										</t>
+										
+									</t>
+									<tr>
+		                    			<td style="border-right:1px solid black;border-bottom:1px solid black;border-top:1px solid black;text-align:center"><strong>TOTAL</strong></td>
+		                    			<td style="border-right:1px solid black;border-bottom:1px solid black;border-top:1px solid black;text-align:center"><span t-esc="sum(data.balance_stock_qty for data in line.product_stock_details_ids)"/></td>
+		                    			<td style="border-right:1px solid black;border-bottom:1px solid black;border-top:1px solid black;text-align:center"></td>
+		                    			<td style="border-right:1px solid black;border-bottom:1px solid black;border-top:1px solid black;text-align:center"><span t-esc="order_qty"/></td>
+		                    			<td style="border-right:1px solid black;border-bottom:1px solid black;border-top:1px solid black;text-align:center"><span t-esc="print_qty"/></td>
+		                    		</tr>
+								
+	                    		</tbody>
+	                    	</table>
+	                	</div>
+						</t>
+					</t>
+	        	</div><br/><br/>
+	        	<div>
+	        		<div class='col-xs-3'>
+	                	<strong><u>UNIT</u></strong>
+		        	</div>
+		        	<div class="col-xs-9">
+		            	<span t-field="doc.unit"></span>
+		            </div>
+		        </div><br/><br/>
+		        <div>
+		            <div class='col-xs-3'>
+	                	<strong><u>DISPACTH DATE</u></strong>
+		        	</div>
+		        	<div class="col-xs-9">
+		            	<span t-field="doc.dispatch_date"></span>
+		            </div>
+		        </div><br/><br/>
+		        <div>
+		            <div class='col-xs-3'>
+	                	<strong><u>JOBSHEET REFERENCE</u></strong>
+		        	</div>
+		        	<div class="col-xs-9">
+		            	<span t-field="doc.note"></span>
+		            </div>
+		        </div><br/><br/>
+		            <div style="text-align:center">
+		        		<strong><u>ARTWORK DETAILS</u></strong>
+		        	</div>
+		        	<br/><br/>
+		        	<div style="text-align:center">
+		        		Document
+		        	</div>
+	    	</div>
+
+	</template>
+	<template id="report_original_job_order_sheet_template">
+        <t t-foreach="docs" t-as="doc">
+            <t t-call="screen_art.report_original_job_order_sheet_template_document" t-lang="doc.partner_id.lang"/>
+        </t>
+	</template>
+	
+	<!--js without client details-->
+	<template id="report_original_job_order_sheet_template_document2">
+	        <t t-set="doc" t-value="doc.with_context({'lang':doc.partner_id.lang})" />
+			
+			<div class="footer">
+				<div><hr style="border-top:1px solid black;width=100%;"></hr></div>
+				<div style="text-align:right">
+					<ul class="list-inline">
+					<li>Page: (<span class="page"/>)</li>
+					</ul>
+				</div>
+			</div>
+			
+	        <div class="page" style="font-size: 17px !important;font-family: aerial;">
+
+				<t t-foreach="doc.factory_distributuion_ids" t-as="line">
+					<p style="float:right"><strong><![CDATA[&nbsp;]]><t t-esc="line.name"/><![CDATA[&nbsp;]]>|</strong></p>
+				</t>
+				<br/>
+				<div class="row">
+	            	<div class="col-xs-4">
+            			<strong>ORIGINAL JOB-SHEET DATED:</strong>
+            		</div>
+            		<div class="col-xs-2">
+            			<strong><span t-field='doc.job_sheet_date' t-options="{&quot;format&quot;: &quot;dd/MM/yyyy&quot;}"></span></strong>
+            		</div>
+            		<div class="col-xs-6"></div>
+	            </div>
+	            <div class="row">
+		            <div class="col-xs-4">
+		            	NOTE
+		            </div>
+		            <div class="col-xs-8 text-uppercase">
+		            	<span t-field='doc.opportunity_id.description'></span>
+		            </div>
+		        </div>
+		        <div class="row">
+		            <div class="col-xs-4">
+		            	JOB NO
+		            </div>
+		            <div class="col-xs-8 text-uppercase">
+		            	<span t-field='doc.name'></span>
+		            </div>
+		        </div>
+		        <div class="row">
+		            <div class="col-xs-4">
+		            	MERCHANT NAME
+		            </div>
+		            <div class="col-xs-8 text-uppercase">
+		            	<span t-field='doc.user_id.name'></span>
+		            </div>
+		        </div>
+		        <div class="row">
+		            <div class="col-xs-4">
+		            	ORDER CONFIRMATION DATE
+		            </div>
+		            <div class="col-xs-8">
+		            	<span t-field='doc.opportunity_id.date_open'></span>
+		            </div>
+		        </div>
+		        <div class="row">
+		            <div class="col-xs-4">
+		            	INQUIRY NOTE
+		            </div>
+		            <div class="col-xs-8 text-uppercase">
+		            	<span t-field='doc.opportunity_id.description'></span>
+		            </div>
+		        </div>
+		        <div class="row">
+		            <div class="col-xs-4">
+		            	REFERENCE
+		            </div>
+		            <div class="col-xs-8 text-uppercase">
+		            	<span t-field='doc.opportunity_id.reference'></span>
+		            </div>
+		        </div>
+				<div class="row">
+		            <div class="col-xs-4">
+		            	PARTY CODE
+		            </div>
+		            <div class="col-xs-8 text-uppercase">
+		            	<span t-field='doc.partner_id.customer_code'></span>
+		            </div>
+		        </div>
+				<div class="row">
+		            <div class="col-xs-4">
+		            	PRINTING FACTORY
+		            </div>
+		            <div class="col-xs-8 text-uppercase">
+		            	<span t-field='doc.factory_id'></span>
+		            </div>
+		        </div>
+				<div class="row">
+		            <div class="col-xs-4">
+		            	FACTORY MEMBER
+		            </div>
+		            <div class="col-xs-8 text-uppercase">
+		            	<span t-field='doc.factory_member'></span>
+		            </div>
+		        </div>
+		        <div class="row">
+		            <div class="col-xs-4">
+		            	PRINT QUANTITY
+		            </div>
+		            <div class="col-xs-8 text-uppercase">
+		            	<span t-field='doc.opportunity_id.print_quality'></span>
+		            </div>
+		        </div>
+		        <div class="row">
+		            <div class="col-xs-4">
+		            	PRODUCT QUALITY
+		            </div>
+		            <div class="col-xs-8 text-uppercase">
+		            	<span t-field='doc.confirmation_date'></span>
+		            </div>
+		        </div>
+		        <div class="row">
+		            <div class="col-xs-4">
+		            	FABRIC QUALITY
+		            </div>
+		            <div class="col-xs-8 text-uppercase">
+		            	<span t-field='doc.opportunity_id.fabric_quality'></span>
+		            </div>
+		        </div>
+		        <div class="row">
+		            <div class="col-xs-4">
+		            	FABRIC COLOR
+		            </div>
+		            <div class="col-xs-8 text-uppercase">
+		            	<span t-field='doc.opportunity_id.fabric_gr_colour'></span>
+		            </div>
+		        </div>
+		        <div class="row">
+		            <div class="col-xs-4">
+		            	SOURCE
+		            </div>
+		            <div class="col-xs-8 text-uppercase">
+		            	<span t-field='doc.source'></span>
+		            </div>
+		        </div>
+		       <!-- <div class="row">
+		            <div class="col-xs-6">
+		            	<strong>INSTRUCTION FOR ART/FACTORY DEPT</strong>
+		            </div>
+		            <div class="col-xs-6"></div>
+		        </div>
+		        <div class="row">
+		            <div class="col-xs-6">
+		            	<strong>REQ.CODE</strong>
+		            </div>
+		            <div class="col-xs-6"></div>
+		        </div>
+		        <div class="row">
+		            <div class="col-xs-3">
+		            	NO OF COLORS
+		            </div>
+		            <div class="col-xs-9">
+		            	1
+		            </div>
+		        </div>
+		        <div class="row">
+		            <div class="col-xs-3">
+		            	NO OF COMBOS
+		            </div>
+		            <div class="col-xs-9">
+		            	1
+		            </div>
+		        </div>
+		        <div class="row">
+		            <div class="col-xs-3">
+		            	NO OF DESIGNS
+		            </div>
+		            <div class="col-xs-9">
+		            	<t t-esc="len(doc.order_line)"></t>
+		            </div>
+		        </div>
+		        <div class="row">
+		            <div class="col-xs-3">
+		            	NO OF STYLES
+		            </div>
+		            <div class="col-xs-9">
+		            	1
+		            </div>
+		        </div>
+		        <div class="row">
+		            <div class="col-xs-3">
+		            	NO OF SIZE
+		            </div>
+		            <div class="col-xs-9">
+		            	1
+		            </div>
+		        </div>-->
+		        <div class="row">
+					 <t t-set="sr_inc" t-value="0"/>
+		            <div class="col-xs-4">
+		            	<strong>DESIGNS</strong>
+		            </div>
+		            <div class="col-xs-8 text-uppercase">
+		            	<t t-foreach="doc.order_line" t-as="line">
+							<t t-set="sr_inc" t-value="sr_inc+1"/>
+		            		<p><span t-esc="sr_inc"/>.<![CDATA[&nbsp;]]><span t-field="line.product_id.name"/></p>
+		            	</t>
+		            </div>
+		        </div><br/><br/>
+		        <div style="text-align:center">
+		        	<strong><u>DESIGN DETAILS</u></strong>
+		        </div>
+				<br/>
+		        <div style="border:1px solid black;border-bottom:1px solid black;border-left:1px solid black;border-right:1px solid black">
+		        	<t t-set="sr_inc1" t-value="0"/>
+		        	<t t-foreach="doc.order_line" t-as="line">
+					<t t-set="sr_inc1" t-value="sr_inc1+1"/>
+		        	<div>
+			        	<div class='col-xs-3'>
+							<b>Design Name:</b> 
+		        	    </div>
+			        	<div class="col-xs-9">
+			            	<b><span t-esc="sr_inc1"/>.<![CDATA[&nbsp;]]><span t-field="line.product_id.name"/></b>
+			            </div>
+			        </div><br/><br/>
+			        <div>
+			            <div class='col-xs-3'>
+			        		No of color:
+			        	</div>
+			        	<div class="col-xs-9">
+			            	1
+			            </div>
+			        </div><br/><br/>
+			        <div>
+			            <div class='col-xs-3'>
+			        		No of Combo:
+			        	</div>
+			        	<div class="col-xs-9">
+			            	1
+			            </div>
+			        </div><br/><br/>
+			        <div>
+			            <div class='col-xs-3'>
+			        		Design Size:
+			        	</div>
+			        	<div class="col-xs-9">
+			            	<span t-field="line.design_size"/>
+			            </div>
+			        </div><br/><br/>
+		            <!-- <t t-foreach="doc.order_line" t-as="line"> -->
+		            	<t t-foreach="line.product_id.combo_details_ids" t-as="combo">
+		            	<div>
+				            <div class='col-xs-3'>
+				        		Combo Name:
+				        	</div>
+				        	<div class="col-xs-9">
+				            	<span t-field="combo.combo_name"/>
+				            </div>
+			        	</div><br/><br/>
+			        	<div>
+				            <div class='col-xs-3'>
+				        		Color Placement:
+				        	</div>
+				        	<div class="col-xs-9">
+				            	<span t-field="combo.combo_placement"/>
+				            </div>
+				        </div><br/><br/>
+				        <div>
+				            <div class='col-xs-3'>
+				        		Fabric Details:
+				        	</div>
+				        	<div class="col-xs-9">
+				            	<!-- <span t-field="combo.combo_size"/> -->
+				            </div>
+				        </div><br/><br/>
+				        <!-- <t t-foreach="line.product_id.combo_details_ids" t-as="combo_details"> -->
+				        	
+		            	<div style='padding-left: 20px;padding-right:20px'>
+				            <table class="table table-condensed" style="border:1px solid black;">
+				            	<thead>
+			                        <tr>
+			                        	<th style="border-right:1px solid black;text-align:center;">SIZE</th>
+			                        	<th style="border-right:1px solid black;text-align:center;">BALANCE STOCK QTY</th>
+			                        	<th style="border-right:1px solid black;text-align:center;">ALLOCATED STOCK QTY</th>
+			                        	<th style="border-right:1px solid black;text-align:center;">ORDER QTY</th>
+			                        	<th style="border-right:1px solid black;text-align:center;">PRINT QTY</th>
+			                        </tr>
+		                    	</thead>
+		                    	<tbody>
+									<t t-set="order_qty" t-value="0" />
+									<t t-set="print_qty" t-value="0" />
+		                    		<t t-foreach="line.product_stock_details_ids" t-as="com">
+										<t t-if="combo.combo_name == com.combo_name">
+											<tr>
+												<td style="border-right:1px solid black;border-bottom:1px solid black;border-top:1px solid black;text-align:center"><strong><span t-field="com.size"/></strong></td>
+												<td style="border-right:1px solid black;border-bottom:1px solid black;border-top:1px solid black;text-align:center"><strong><span t-field="com.balance_stock_qty"/></strong></td>
+												<td style="border-right:1px solid black;border-bottom:1px solid black;border-top:1px solid black;text-align:center"><strong><span t-field="com.allocated_stock_qty"/></strong></td>
+												<td style="border-right:1px solid black;border-bottom:1px solid black;border-top:1px solid black;text-align:center"><strong><span t-field="com.order_qty"/></strong></td>
+												<td style="border-right:1px solid black;border-bottom:1px solid black;border-top:1px solid black;text-align:center"><strong><span t-field="com.print_qty"/></strong></td>
+											</tr>
+											<tr>
+												<td></td>
+											</tr>
+                                            <t t-set="order_qty" t-value="order_qty+com.order_qty" />
+											<t t-set="print_qty" t-value="print_qty+com.print_qty" />
+
+										</t>
+										
+									</t>
+									<tr>
+		                    			<td style="border-right:1px solid black;border-bottom:1px solid black;border-top:1px solid black;text-align:center"><strong>TOTAL</strong></td>
+		                    			<td style="border-right:1px solid black;border-bottom:1px solid black;border-top:1px solid black;text-align:center"><span t-esc="sum(data.balance_stock_qty for data in line.product_stock_details_ids)"/></td>
+		                    			<td style="border-right:1px solid black;border-bottom:1px solid black;border-top:1px solid black;text-align:center"></td>
+		                    			<td style="border-right:1px solid black;border-bottom:1px solid black;border-top:1px solid black;text-align:center"><span t-esc="order_qty"/></td>
+		                    			<td style="border-right:1px solid black;border-bottom:1px solid black;border-top:1px solid black;text-align:center"><span t-esc="print_qty"/></td>
+		                    		</tr>
+								
+	                    		</tbody>
+	                    	</table>
+	                	</div>
+						</t>
+					</t>
+	        	</div><br/><br/>
+	        	<div>
+	        		<div class='col-xs-3'>
+	                	<strong><u>UNIT</u></strong>
+		        	</div>
+		        	<div class="col-xs-9">
+		            	<span t-field="doc.unit"></span>
+		            </div>
+		        </div><br/><br/>
+		        <div>
+		            <div class='col-xs-3'>
+	                	<strong><u>DISPACTH DATE</u></strong>
+		        	</div>
+		        	<div class="col-xs-9">
+		            	<span t-field="doc.dispatch_date"></span>
+		            </div>
+		        </div><br/><br/>
+		        <div>
+		            <div class='col-xs-3'>
+	                	<strong><u>JOBSHEET REFERENCE</u></strong>
+		        	</div>
+		        	<div class="col-xs-9">
+		            	<span t-field="doc.note"></span>
+		            </div>
+		        </div><br/><br/>
+		            <div style="text-align:center">
+		        		<strong><u>ARTWORK DETAILS</u></strong>
+		        	</div>
+		        	<br/><br/>
+		        	<div style="text-align:center">
+		        		Document
+		        	</div>
+	    	</div>
+
+	</template>
+	               
+	<template id="report_original_job_order_sheet_template_without_client_details">
+        <t t-foreach="docs" t-as="doc">
+            <t t-call="screen_art.report_original_job_order_sheet_template_document2" t-lang="doc.partner_id.lang"/>
+        </t>
+	</template>
+
+</odoo>

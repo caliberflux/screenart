@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_saleorder_inherit" inherit_id="sale.report_saleorder_document">
+
+            <xpath expr="//t[@t-call='report.external_layout']" position="replace">
+                  <div class="page">
+                    <style>
+                        table, th, td {
+                            border: 1px solid black;
+                            text-align: center;
+                        }
+                    </style>
+                    <p style="float:right"><strong>UPDATED ON :<![CDATA[&nbsp;]]></strong><span t-field="doc.date_order"></span></p>
+                    <br/>
+                    <div style="border:1px solid black;background-color: rgb(182, 221, 232);">
+                        <h3><![CDATA[&nbsp;]]><span t-field="doc.company_id.name"/></h3>
+                        <h4><![CDATA[&nbsp;]]><span t-esc="doc.company_id.street"/><![CDATA[&nbsp;]]><span t-esc="doc.company_id.street2"/><![CDATA[&nbsp;]]><span t-esc="doc.company_id.city"/>-<span t-esc="doc.company_id.zip"/></h4>
+                        <h4><![CDATA[&nbsp;]]>P-<t t-esc="doc.company_id.phone"/></h4>   
+                    </div>
+                    <br/>
+                    <div style="border:1px solid black;background-color: rgb(252, 213, 180);">
+                        <h3><![CDATA[&nbsp;]]>CLIENT NAME :<![CDATA[&nbsp;]]><span t-field="doc.partner_id.parent_id"/></h3>
+                        <h4><![CDATA[&nbsp;]]>KIND ATTN :<![CDATA[&nbsp;]]><span t-esc="doc.partner_id.name"/></h4>
+                    </div>
+                    <br/>
+                    <table class="table table-condensed" style="width:100%">
+                        <thead>
+                            <tr style="background-color:rgb(178, 161, 199)">
+                                <th>DESIGN NAME</th>        
+                                <th>SIZE</th>
+                                <th>COLOUR</th>
+                                <th>QUALITY</th>
+                                <th>DESIGN</th>
+                                <th>QTY</th>
+                                <th>PRICE/PC</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="doc.design_details_ids" t-as="line">
+                                <tr>
+                                    <td>
+                                        <t t-esc="line.product_name"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="line.size"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="line.colour"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="line.quality"/>
+                                    </td>
+                                    <td  style="max-height: 20px;">
+                                        <!--<span t-field="line.design_image" t-field-options="{&quot;widget&quot;: &quot;image&quot;, &quot;class&quot;: &quot;img-rounded&quot;}"/>-->
+                                        <img t-att-src="'data:image/png;base64,%s' %line.design_image" style="max-height: 100px;"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="line.quantity"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="line.price"/>
+                                    </td>
+                                </tr>
+                            </t>
+
+                        </tbody>
+                    </table>
+                    
+                    <div style="border:1px solid black;font-weight:bold;">
+                        <p style="font-size:15px;"><![CDATA[&nbsp;]]>TERMS &amp; CONDITIONS</p>
+                        <p><![CDATA[&nbsp;]]>1.GST 12 %  AS APPLICABLE</p>
+                        <p><![CDATA[&nbsp;]]>2.COURIER CHARGES EXTRA / TO PAY / LANDED BY SURFACE / LANDED BY AIR / EXWORKS MUMBAI / CNF / CIF / FOB </p>
+                        <p><![CDATA[&nbsp;]]>3.SAMPLING CHARGES Rs.        FOR PCS REFUNDABLE /NON REFUNDBALE </p>
+                        <p><![CDATA[&nbsp;]]>4.PRODUCITON LEAD TIME WILL BE 8-10 WORKING DAYS [ DEPENDING ON THE QUNATITY &amp; QUALITY ]</p>
+                        <p><![CDATA[&nbsp;]]>5.COLOR VARIATION WOULD BE THERE BETWEEN SAMPLES &amp; PRODUCTIONS &amp; ALSO AMONGST PRODUCTION IN A RATIO OF 17:20 (FLOCK &amp; PHOTO PRINT) &amp; 18 :20 (DURAFLEX /STONES)</p>
+                        <p><![CDATA[&nbsp;]]>6.BEFORE PLACING BULK ORDER PLEASE  HAVE YOUR NECESSARY LAB TESTS</p>
+                        <p><![CDATA[&nbsp;]]>7.PAYMENT TERMS -100% ADVANCE  / 30 DAYS CREDIT / 15 DAYS CREDIT / 30 DAYS PDC / OTHERS </p>
+                    </div>
+                  
+                  </div>
+            </xpath>
+    </template>
+</odoo>

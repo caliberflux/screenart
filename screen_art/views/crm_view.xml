@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <record model="ir.ui.view" id="crm_lead_form_sart">
+            <field name="name">crm.lead.form.sart</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='stage_id']" position="replace">
+                    <field name="stage_id" widget="statusbar"
+                            options="{'fold_field': 'fold'}"
+                            domain="['|', ('team_id', '=', team_id), ('team_id', '=', False)]"
+                            attrs="{'invisible': [('active', '=', False)]}"/>
+                </xpath>
+                
+                <xpath expr="//button[@name='action_set_won']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                
+                <xpath expr="//button[@name='%(crm.crm_lead_lost_action)d']" position="before">
+                    <button name="send_requirement_mail" string="Send Mail"
+                        type="object" class="oe_highlight"
+                        attrs="{'invisible': [('probability', '!=', 10)]}"/>
+                    <button name="send_followup_mail" string="Send Mail"
+                        type="object" class="oe_highlight"
+                        attrs="{'invisible': [('probability', '!=', 30)]}"/>
+                    <button name="make_art_work" string="Make Art Work"
+                        type="object" class="oe_highlight"
+                        attrs="{'invisible': [('probability', '!=', 30)]}"/>
+                    <button name="procced_for_approval" string="Design Approval"
+                        type="object" class="oe_highlight"
+                        attrs="{'invisible': [('probability', '!=', 50)]}"/>
+                </xpath>
+
+                <page name= 'lead' position='after'>
+                    <page name="design_details" string="Design Details">
+                        <group>
+                            <group>
+                                <field name="design_name"/>
+                                <field name="original_artwork"/>
+                                <field name="design_size"/>
+                                <field name="design_priority"/>
+                            </group>
+                            <group>
+                                <field name="print_quality"/>
+                                <!--<field name="design_material"/>-->
+                                <field name="reference"/>
+                                <field name="comment"/>
+                            </group>
+                        </group>
+                    </page>
+                    <page name="design_col_comination" string="Design Colour/Combination">
+                        <group>
+                            <group>
+                                <field name="pantone_no"/>
+                                <field name="fabric_gr_colour"/>
+                                <field name="fabric_quality"/>
+                                <field name="order_quantity"/>
+                            </group>
+                            <group>
+                                <field name="need_sample"/>
+                                <field name="sample_qty" attrs="{'invisible': [('need_sample','=','no')]}"/>
+                                <field name="sample_size" attrs="{'invisible': [('need_sample','=','no')]}"/>
+                                <field name="sample_colour" attrs="{'invisible': [('need_sample','=','no')]}"/>
+                            </group>
+                        </group>
+                        
+                        
+                    </page>
+                    <page name="dispach_instruction" string="Dispach Instruction">
+                        <group>
+                            <group>
+                                <field name="courier_mode"/>
+                                <field name="road_permit"/>
+                            </group>
+                            <group>
+                                <field name="destination"/>
+                                <field name="account_details"/>
+                            </group>
+                        </group>
+                    </page>
+                </page>
+                
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="crm_lead_sale_crm_form_sart">
+            <field name="name">crm.lead.form.sale.crm.sart</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="sale_crm.crm_case_form_view_oppor"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='%(sale_crm.sale_action_quotations_new)d']" position="replace">
+                    <button string="New Quotation" name="%(sale_crm.sale_action_quotations_new)d" type="action" class="oe_highlight"
+                        attrs="{'invisible': [('probability', '!=', 100)]}"
+                        context="{'search_default_partner_id': partner_id,
+                                  'default_partner_id': partner_id,
+                                  'default_team_id': team_id}"/>
+                </xpath>
+            </field>
+        </record>
+        
+        
+        <record model="ir.ui.view" id="crm_lead_filter_sart">
+            <field name="name">crm.lead.sart</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.view_crm_case_leads_filter"/>
+            <field name="arch" type="xml">
+                <filter name="groupby_salesperson" position="after">
+                    <filter string="Sources" name="mail_domain" domain="[]" context="{'group_by':'email_domain'}"/>
+                </filter>
+            </field>
+        </record>
+        
+        <record model="ir.actions.act_window" id="crm.crm_lead_all_leads">
+            <field name="name">Leads</field>
+            <field name="context">{
+                    'default_type':'lead',
+                    'search_default_type': 'lead',
+                    'needaction_menu_ref': 'crm.menu_crm_opportunities',
+                    'search_default_to_process':1,
+                    'search_default_mail_domain':1,
+                }
+            </field>
+        </record>
+    </data>
+</odoo>
