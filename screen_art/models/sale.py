@@ -1,5 +1,6 @@
 from odoo import api, fields, models, tools, SUPERUSER_ID,_
 from datetime import datetime
+from lxml import etree
 
 class QuotationApprovalWizard(models.Model):
     _name= "quotation.approval.wizard"
@@ -66,7 +67,7 @@ class SaleOrder(models.Model):
         ('diamond','Diamond'),
         ('merge', 'Merge'),
         ], string='Job Order Type',default='original',required=True)
-    mode_of_production = fields.Selection([('sample', 'Need Sample'),('production','Direct Production'),], string='Mode Of Production',states={'sent': [('required', True)]})
+    mode_of_production = fields.Selection([('sample', 'Need Sample'),('production','Direct Production')], string='Mode Of Production')
     parent_so_id = fields.Many2one('sale.order', 'Parent SO')
     revised_order_count = fields.Integer(string='# of Revised Orders', compute='_revised_count')
     revision_number = fields.Integer(string='Revision', copy=False, default=1)
@@ -84,6 +85,20 @@ class SaleOrder(models.Model):
     factory_distributuion_ids = fields.Many2many('factory','factory_order_rel','factory_id','order_id',string='Factory Distribution')
     mode_of_production = fields.Selection([('sample', 'Need Sample'),('production','Direct Production'),], string='Mode Of Production')
     source = fields.Selection([('screen_art', 'Screen Art'),('out_source','Out Source'),], string='Source')
+    
+    def fields_view_get(self, view_id=None, view_type='form',toolbar=False, submenu=False):
+        res = models.Model.fields_view_get(self,view_id=view_id, view_type=view_type,toolbar=toolbar, submenu=submenu)
+        if view_type == 'form':
+            doc = etree.XML(res['arch'])
+            for sheet in doc.xpath("//sheet"):
+                parent = sheet.getparent()
+                index = parent.index(sheet)
+                for child in sheet:
+                    parent.insert(index, child)
+                    index += 1
+                parent.remove(sheet)
+            res['arch'] = etree.tostring(doc)
+        return res
     
     def quotation_first_approval(self):
         self.state='quot_approval1'
@@ -140,16 +155,93 @@ class SaleOrder(models.Model):
     @api.multi
     def js_without_client(self):
         return self.env['report'].get_action(self, 'screen_art.report_original_job_order_sheet_template_without_client_details')
+   
+    @api.multi
+    def action_confirm(self):
+        res = super(SaleOrder, self).action_confirm()
+        print "res================================================",res
+        print "self===============================================",self,self.picking_ids
+        for picking in self.picking_ids:
+            print ("picking=====state=======================",picking,picking.state)
+            picking.sale_order_id = self.id
+            if picking.state in ('confirmed','partially_available'):
+                picking.force_assign()
+        return res
+    
+    @api.multi
+    def action_cancel(self):        
+        for rec in self.order_line:
+            print "rec=====================================",rec
+            # sql = '''select design_id,combo_name,combo_size,sum(done_qty) as qty 
+            #         from product_stock_management where sale_order_id = {0} and design_id = {1}
+            #         group by design_id,combo_name,combo_size'''.format(rec.order_id.id,rec.product_id.id)
             
+            sql = '''select g.design_id,g.combo_name,g.combo_size,sum(g.qty) as qty  from (select a.design_id,a.combo_name,a.combo_size,sum(done_qty) as qty 
+                    from product_stock_management a where sale_order_id = {0} and design_id = {1}
+                    group by a.design_id,a.combo_name,a.combo_size
+                    union
+                    select c.product_id,b.combo_name,b.size,sum(b.allocated_stock_qty) as qty
+                    from product_stock_details_lines b
+                    inner join sale_order_line c on c.id = b.sale_line_id
+                    inner join sale_order d on d.id = c.order_id
+                    where  d.id = {0} and c.product_id = {1}
+                    group by c.product_id,b.combo_name,b.size) g group by g.design_id,g.combo_name,g.combo_size'''.format(rec.order_id.id,rec.product_id.id)
+            
+            print "sql====================",sql
+            self._cr.execute(sql)
+            result = self._cr.dictfetchall()
+            print ("result==========================",result)
+            if result:
+                total_qty = 0
+                list1 = []
+                for data in result:
+                    list_val={
+                        'combo_name': data['combo_name'],
+                        'combo_size': data['combo_size'],
+                        'stock_qty': data['qty'],
+                        }
+                    list1.append((0,0,list_val))
+                    total_qty += data['qty']
+                print "list1======================================",list1
+                print "total_qty=============================",total_qty
+                self.env['stock.quant'].create({
+                    'product_id': rec.product_id.id,
+                    'in_date': datetime.now(),
+                    'qty' : total_qty,
+                    'location_id' : 15,
+                    'stock_quant_combo_ids' : list1,
+                })
+            
+        self._cr.execute("delete from product_stock_management where sale_order_id = %s",(self.id,))
+        return super(SaleOrder, self).action_cancel()
+    
 class ProductStockDetailsLines(models.Model):
     _name = "product.stock.details.lines"
     
+    @api.multi
+    @api.depends('combo_name','size')
+    def compute_balance_stock(self):
+        print ("compute_balance_stock===============================",self)
+        for rec in self:
+            print ("rec========================================",rec)
+            self._cr.execute("select sum(b.stock_qty) as qty from stock_quant a \
+            inner join stock_quant_combo b on b.stock_quant_id = a.id where a.product_id= %s and b.combo_name = %s and b.combo_size = %s",(str(rec.sale_line_id.product_id.id),rec.combo_name,rec.size))
+            qty = self._cr.fetchall()
+            print ("qty====================",qty)
+            rec.balance_stock_qty = qty[0][0]
+        
+    @api.multi
+    @api.depends('order_qty','allocated_stock_qty')
+    def compute_print_qty(self):
+        for line in self:
+            line.print_qty = line.order_qty - line.allocated_stock_qty
+    
     combo_name = fields.Char("Combo Name")
     size = fields.Char("Size")
-    balance_stock_qty = fields.Integer("Balance Stock Qty")
+    balance_stock_qty = fields.Integer(compute='compute_balance_stock', string="Balance Stock Qty")
     allocated_stock_qty = fields.Integer("Allocated Stock Qty")
     order_qty = fields.Integer("Order Qty")
-    print_qty = fields.Integer("Print Qty")
+    print_qty = fields.Integer(compute='compute_print_qty', string="Print Qty")
     sale_line_id = fields.Many2one('sale.order.line')
             
 class SaleOrderLine(models.Model):
@@ -168,7 +260,11 @@ class SaleOrderLine(models.Model):
         return list(set(combo_name_list))
     
     def stock_details(self):
-        
+        print ("context================================",self,self._context)
+        context = dict(self.env.context or {})
+        if self.order_id.state in ('job_order','sale','done'):
+            context.update({'make_readonly': True})
+        print ("context=========after=======================",context)
         if self.product_stock_details_ids:
             return {
             'name': _('Stock Details'),
@@ -179,7 +275,7 @@ class SaleOrderLine(models.Model):
             'type': 'ir.actions.act_window',
             'res_id': self.id,
             'target': 'new',
-            # 'context':{'default_sale_line_id' : self.id}
+            'context': context,
             }
         
         else:
@@ -208,10 +304,70 @@ class SaleOrderLine(models.Model):
                 'type': 'ir.actions.act_window',
                 'res_id': self.id,
                 'target': 'new',
-                # 'context':{'default_product_stock_details_ids' : list1}
+                'context': context,
                 }
+    
+    def stock_update(self):
+        print ("stock update==============================",self)
+        list1=[]
+        parent_id = False
+        for rec in self.product_stock_details_ids:
+            if parent_id == False:
+                parent_id = self.env['product.stock.update'].create({
+                    'design_id' : self.product_id.id,
+                    'size' : self.design_size,
+                    'sale_order_id' : self.order_id.id,
+                    })
+                
+            value ={
+                'combo_name':rec.combo_name,
+                'size':rec.size,
+                'order_qty':rec.order_qty,
+                'print_qty':rec.print_qty,
+                'product_stock_update_id': parent_id.id,
+            }
+        
+            list1.append((0,0,value))
+        
+        parent_id.stock_update_lines = list1
+        
+        return {
+            'name': _('Stock Details'),
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': 'product.stock.update',
+            'view_id': self.env.ref('screen_art.wizard_product_stock_update').id,
+            'type': 'ir.actions.act_window',
+            'res_id': parent_id.id,
+            'target': 'new',
+            # 'context': context,
+            }
+        
     @api.multi
     def save(self):
+        print ("SAVE========================================",self)
+        list1=[]
+        total_allocated_qty = 0
+        for rec in self.product_stock_details_ids:
+            total_allocated_qty +=  rec.allocated_stock_qty
+            if rec.allocated_stock_qty:
+                list_val={
+                    'combo_name':rec.combo_name,
+                    'combo_size': rec.size,
+                    'stock_qty': (-1 ) * rec.allocated_stock_qty,
+                    }
+                print "list_val===================",list_val
+                list1.append((0,0,list_val))
+        
+        # location_id = self.env['stock.location'].search([('usage','=','customer')],order="id asc")[0]
+        self.env['stock.quant'].create({
+            'product_id': self.product_id.id,
+            'qty' : (-1 ) * total_allocated_qty,
+            'location_id' : 15,
+            'stock_quant_combo_ids' : list1,
+        })
+                
+            
         return True
     
     @api.onchange('product_uom', 'product_uom_qty')

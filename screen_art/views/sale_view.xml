@@ -142,15 +142,16 @@
                         <field name="job_order_type"/>
                     </field>
                     <field name="payment_term_id" position="after">
-                        <field name="mode_of_production" states='sent'/>
+                        <field name="mode_of_production" states='sent' attrs="{'required': [('state', '=', 'sent')]}"/>
                     </field>
+                    
                     
                     <xpath expr="//button[@name='action_quotation_send']" position="replace">
                         <button name="action_quotation_send" string="Send by Email" type="object" states="quot_approval1,quot_approval2,revised_quot" class="btn-primary"/>
                     </xpath>
                     
                     <xpath expr="//button[@name='action_cancel']" position="replace">
-                        <button name="action_cancel" states="draft,quot_approval1,quot_approval2,sent,sale,revised_quot,sample_order,production_order" type="object" string="Cancel"/>
+                        <button name="action_cancel" states="draft,quot_approval1,quot_approval2,sent,sale,revised_quot,sample_order,production_order,job_order,sale" type="object" string="Cancel"/>
                     </xpath>
                     
                     <button name="print_quotation" position="replace"/>
@@ -162,8 +163,8 @@
                         <button name="product_creation" string="Product Creation" type="object" states="sent" class="btn-primary"/>
                         <button name="action_confirm" states="job_order" string="Confirm Sale" class="btn-primary o_sale_confirm" type="object" />
                         <button name="approve_job_order" string="Approve Job Order" type="object" states="sample_order,production_order" class="btn-primary"/>
-                        <button name="js_with_client" states="job_order" string="JS with client details" class="btn-primary" type="object"/>
-                        <button name="js_without_client" states="job_order" string="JS without client details" class="btn-primary" type="object" />
+                        <button name="js_with_client" states="sample_order,production_order,job_order" string="JS with client details" class="btn-primary" type="object"/>
+                        <button name="js_without_client" states="sample_order,production_order,job_order" string="JS without client details" class="btn-primary" type="object" />
                     </button>
                     
                     <xpath expr="//notebook/page[1]/field[@name='order_line']/tree/field[@name='sequence']"  position="after">
@@ -181,10 +182,15 @@
                     
                     <xpath expr="//notebook/page[1]/field[@name='order_line']/tree/field[@name='price_subtotal']"  position="after">
                         <button name="stock_details" type="object" icon="fa-align-justify" class="btn-primary"/>
+                        <button name="stock_update" type="object" string="Update Stock" states="job_order" class="btn-primary"/>
                     </xpath>
                     
                     <xpath expr="//notebook/page[1]/field[@name='order_line']"  position="attributes">
-                        <attribute name="context">{'sale_order_id': active_id}</attribute> 
+                        <attribute name="context">{'sale_order_id': active_id,'state': state}</attribute> 
+                    </xpath>
+                    
+                    <xpath expr="//notebook/page[1]/field[@name='order_line']/tree/field[@name='tax_id']"  position="attributes">
+                        <attribute name="invisible">1</attribute>
                     </xpath>
     
                     <xpath expr="/form/sheet/notebook/page[3]" position="after">
@@ -206,6 +212,7 @@
                             </group>
                         </page>
                     </xpath>
+                    
                     <xpath expr="/form/sheet/group/group[2]/field[@name='payment_term_id']" position="after">
                         <field name="job_sheet_date" attrs="{'invisible': [('state', '!=', 'job_order')]}"/>
                         <field name="approved_by" attrs="{'invisible': [('state', '!=', 'job_order')]}"/>
@@ -216,12 +223,24 @@
             </record>
         
     
+        
+        <record id="view_view_order_gst_form_inherit_sart" model="ir.ui.view">
+                <field name="name">sale.order.gst.form.sale.sart</field>
+                <field name="model">sale.order</field>
+                <field name="inherit_id" ref="india_gst.view_order_gst_form"/>
+                <field name="arch" type="xml">
+                    <field name='cgst' position='replace'/>
+                    <field name='sgst' position='replace'/>
+                    <field name='igst' position='replace'/>
+                </field>
+        </record>
+        
         <record id="wizard_sale_order_line_sart" model="ir.ui.view">
         <field name="name">sale.order.line.sart</field>
         <field name="model">sale.order.line</field>
         <field name="arch" type="xml">
             <form string="Stock Details">  
-                <field nolabel="1" name="product_stock_details_ids">
+                <field nolabel="1" name="product_stock_details_ids" readonly="context.get('make_readonly')"><!--attrs="{'readonly': [('parent.state', '=', 'job_order')]}"  readonly="context.get('state'), '=' , 'job_order'"-->
                     <tree editable="bottom">
                         <field name="combo_name"/>
                         <field name="size"/>

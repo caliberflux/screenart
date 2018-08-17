@@ -5,3 +5,4 @@ import crm
 import sale
 import hr
 import account
+import inventory

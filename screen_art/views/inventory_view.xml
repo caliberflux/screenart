@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="wizard_product_stock_update" model="ir.ui.view">
+        <field name="name">product.stock.update.wizard</field>
+        <field name="model">product.stock.update</field>
+        <field name="arch" type="xml">
+                <form string="Stock Update">
+                    <!--<header>
+                        <button name="stock_calculate" type="object" string="Update" class="oe_highlight"/>
+                    </header>-->
+                    <group col="4" colspan="2">
+                        <field name="design_id"/>
+                        <field name="size"/>
+                        <field name="sale_order_id"/>
+                        <field name="factory_member"/>
+                        <field name="date"/>
+                    </group>
+                    <notebook>
+                        <page string="Stock Update">
+                            <field name="stock_update_lines">
+                                <tree editable="bottom">
+                                   <field name="combo_name"/>
+                                   <field name="size"/>
+                                   <field name="order_qty"/>
+                                   <field name="print_qty"/>
+                                   <field name="stock_qty"/>
+                                   <field name="defected_qty"/>
+                                   <field name="done_qty"/>
+                                   <field name="current_stock_qty"/>
+                                   <field name="extra_qty"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                    <footer>
+                        <button name="stock_calculate" type="object" string="Update" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" special="cancel" class="oe_highlight"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        <record id="product_stock_management_form" model="ir.ui.view">
+        <field name="name">product.stock.management</field>
+        <field name="model">product.stock.management</field>
+        <field name="arch" type="xml">
+            <form edit="0">
+                <group col="4">
+                    <field name="design_id"/>
+                    <field name="design_size"/>
+                    <field name="date"/>
+                    <field name="sale_order_id"/>
+                    <field name="factory_member"/>
+                    <field name="combo_name"/>
+                    <field name="combo_size"/>
+                    <field name="stock_qty"/>
+                    <field name="defected_qty"/>
+                    <field name="done_qty"/>
+                </group>
+            </form>
+        </field>
+        </record>
+        
+        <record id="product_stock_management_tree" model="ir.ui.view">
+        <field name="name">product.stock.management</field>
+        <field name="model">product.stock.management</field>
+        <field name="arch" type="xml">
+            <tree create="0">
+                <field name="design_id"/>
+                <field name="design_size"/>
+                <field name="date"/>
+                <field name="sale_order_id"/>
+                <field name="factory_member"/>
+                <field name="combo_name"/>
+                <field name="combo_size"/>
+                <field name="stock_qty"/>
+                <field name="defected_qty"/>
+                <field name="done_qty"/>
+            </tree>
+        </field>
+        </record>
+        
+        <record id="stock_management_action" model="ir.actions.act_window">
+            <field name="name">Stock Update</field>
+            <field name="res_model">product.stock.management</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+	<menuitem id="menu_stock_update" name="Stock Entries" parent="stock.menu_warehouse_report" action="stock_management_action" sequence="135"/>
+    
+    <record id="view_stock_quant_form_inherit" model="ir.ui.view">
+            <field name="name">stock.quant.form.sart</field>
+            <field name="model">stock.quant</field>
+            <field name="inherit_id" ref="stock.view_stock_quant_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/group[2]/field[@name='history_ids']" position="after">
+                    <field name="stock_quant_combo_ids" string="Combo Stock">
+                        <tree readonly="1">
+                            <field name="combo_name"/>
+                            <field name="combo_size"/>
+                            <field name="stock_qty"/>
+                        </tree>
+                    </field>
+                </xpath>
+            </field>
+    </record>
+    
+    <!-- inherit stock move -->
+    <record id="view_move_picking_tree_inherit_sart" model="ir.ui.view">
+            <field name="name">stock.move.tree.inherit</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_picking_tree"/>
+            <field name="arch" type="xml">
+                <field name='state' position="after">
+                    <button name="split_stock_qty" type="object" icon="fa-align-justify" class="btn-primary"/>
+                </field>
+            </field>
+    </record>
+    
+    <record id="wizard_stock_move_sart" model="ir.ui.view">
+        <field name="name">stock.move.sart</field>
+        <field name="model">stock.move</field>
+        <field name="arch" type="xml">
+            <form string="Stock Details">  
+                <field nolabel="1" name="product_stock_details_move_ids">
+                    <tree editable="bottom">
+                        <field name="combo_name"/>
+                        <field name="size"/>
+                        <field name="qty"/>
+                    </tree>
+                </field>
+                <footer>
+                    <button name="save" type="object" string="Save" class="oe_highlight"/>
+                    or
+                    <button string="Cancel" special="cancel" class="oe_highlight"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+        
+
+    </data>
+</odoo>

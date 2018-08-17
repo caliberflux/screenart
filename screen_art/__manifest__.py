@@ -7,7 +7,7 @@
     'category': 'Hidden',
     'description': """Screen Art Design System""",
     'website': 'https://www.odoo.com/page/crm',
-    'depends': ['crm','sale','purchase','stock','hr','india_gst','mrp'],
+    'depends': ['crm','sale','purchase','stock','hr','india_gst','account_accountant'],
     'data': [
         'data/design_exceed_time_data.xml',
         'views/product_view.xml',
@@ -22,6 +22,7 @@
         'report/proforma_invoice.xml',
         'report/tax_invoice.xml',
         'views/account_view.xml',
+        'views/inventory_view.xml',
         ],  
     'installable': True, 
     'application': False,
